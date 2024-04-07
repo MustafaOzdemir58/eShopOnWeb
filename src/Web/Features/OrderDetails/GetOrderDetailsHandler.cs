@@ -39,8 +39,7 @@ public class GetOrderDetailsHandler : IRequestHandler<GetOrderDetails, OrderDeta
             }).ToList(),
             OrderNumber = order.Id,
             ShippingAddress = order.ShipToAddress,
-            Total = order.Total(),
-            OrderStatus=order.Status.ToString()
+            Total = order.Total()
         };
     }
 }
