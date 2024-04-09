@@ -8,5 +8,5 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 public enum OrderStatus :byte
 {
     Pending,
-    Approved
+    Approved 
 }

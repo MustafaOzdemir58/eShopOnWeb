@@ -32,6 +32,6 @@ public class ApproveOrderEndpoint : IEndpoint<AspNetCore.Http.IResult, ApproveOr
         var response = new ApproveOrderResponse(request.CorrelationId());
         await _orderService.ApproveOrderAsync(request.Id);
         response.Result = true;
-        return Results.Ok(response);
+        return Results.Ok(response); 
     }
 }

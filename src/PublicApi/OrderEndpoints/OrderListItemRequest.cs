@@ -16,7 +16,7 @@ public class OrderListItemRequest : BaseRequest
     public OrderListItemRequest(int? pageSize, int? pageIndex, string? userId)
     {
         PageSize = pageSize ?? 0;
-        PageIndex = pageIndex ?? 0;
-        userId = userId ?? string.Empty;
-    }
+        PageIndex = pageIndex ?? 0; 
+        userId = userId ?? string.Empty; 
+    } 
 }

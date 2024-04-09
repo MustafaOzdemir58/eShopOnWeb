@@ -66,7 +66,7 @@ public class OrderService : IOrderService
         var orderSpecification = new OrderByIdSpecification(id);
         var order = await _orderRepository.FirstOrDefaultAsync(orderSpecification);
         if(order is not null)
-        {
+        { 
             order.ApproveOrder();
             await _orderRepository.UpdateAsync(order);
         }

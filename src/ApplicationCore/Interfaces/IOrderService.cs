@@ -9,5 +9,5 @@ public interface IOrderService
     Task CreateOrderAsync(int basketId, Address shippingAddress);
     Task<List<Order>> GetAllOrdersAsync(string userId);
     Task ApproveOrderAsync(int id);
-    Task<Order> GetOrderByIdAsync(int id);
+    Task<Order> GetOrderByIdAsync(int id); 
 }

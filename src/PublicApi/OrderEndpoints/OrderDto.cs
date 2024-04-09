@@ -16,7 +16,7 @@ public class OrderDto
     public DateTimeOffset OrderDate { get; set; }
     public decimal TotalPrice { get; set; }
     public OrderDtoStatus Status { get; set; }
-}
+} 
 public class OrderItemBuyerDto
 {
     public string BuyerId { get; set; }

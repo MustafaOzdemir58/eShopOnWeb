@@ -45,6 +45,6 @@ public class OrderService : IOrderService
     {
         _logger.LogInformation("Fetching order from API.");
         var orderByIdTask = await _httpService.HttpGet<OrderItemGetByIdResponse>($"orders/{id}");
-        return orderByIdTask;
+        return orderByIdTask; 
     }
 }

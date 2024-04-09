@@ -32,6 +32,6 @@ public partial class List : BlazorComponent
     }
     private async Task DetailClick(int id)
     {
-        DetailsComponent.Open(id);
+        DetailsComponent.Open(id); 
     }
 }
