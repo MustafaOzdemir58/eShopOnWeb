@@ -1,6 +1,7 @@
 ﻿@inject ILogger<Details> Logger
 @inject IJSRuntime JSRuntime
 @inject IOrderService OrderService
+@inject NavigationManager NavigationManager
 
 <div class="modal @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
     <div class="modal-dialog" role="document">
@@ -93,6 +94,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Close</button>
+                @if (_order.Status != OrderItemStatus.Approved)
+                {
+                    <button @onclick="@(() => ApproveClick(_order.OrderId))" @onclick:stopPropagation="true" class="btn btn-danger">
+                        Approve Order
+                </button>}
+               
             </div>
         </div>
     </div>
@@ -124,5 +131,11 @@
         _modalDisplay = "none";
         _modalClass = "";
         _showDetailsModal = false;
+    }
+    private async Task ApproveClick(int id)
+    {
+        var response = await OrderService.ApproveOrderAsync(id);
+        NavigationManager.NavigateTo("admin/orders", true);
+        StateHasChanged();
     }
 }
