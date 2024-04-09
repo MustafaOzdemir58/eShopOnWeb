@@ -14,7 +14,7 @@ using MinimalApi.Endpoint;
 
 namespace Microsoft.eShopWeb.PublicApi.OrderEndpoints;
 
-public class OrderListPageEndpoint : IEndpoint<AspNetCore.Http.IResult, OrderListItemRequest, IRepository<Order>>
+public class OrderListPageEndpoint : IEndpoint<AspNetCore.Http.IResult, OrderListItemRequest>
 {
     private readonly IOrderService _orderService;
     private readonly IReadRepository<Buyer> _buyerRepository;
@@ -27,15 +27,15 @@ public class OrderListPageEndpoint : IEndpoint<AspNetCore.Http.IResult, OrderLis
 
     public void AddRoute(IEndpointRouteBuilder app)
     {
-        app.MapGet("api/orders", async (int? pageSize, int? pageIndex, string? buyerId, IRepository<Order> orderRepository) =>
+        app.MapGet("api/orders", async (int? pageSize, int? pageIndex, string? buyerId) =>
         {
-            return await HandleAsync(new OrderListItemRequest(pageSize, pageIndex, buyerId), orderRepository);
+            return await HandleAsync(new OrderListItemRequest(pageSize, pageIndex, buyerId));
         }).Produces<OrderListItemResponse>()
-             .WithTags("OrderItemEndpoints");
+             .WithTags("OrderEndpoints");
 
     }
 
-    public async Task<AspNetCore.Http.IResult> HandleAsync(OrderListItemRequest request1, IRepository<Order> request2)
+    public async Task<AspNetCore.Http.IResult> HandleAsync(OrderListItemRequest request1)
     {
 
         await Task.Delay(1000);
@@ -60,7 +60,7 @@ public class OrderListPageEndpoint : IEndpoint<AspNetCore.Http.IResult, OrderLis
 
             }).ToList(),
             TotalPrice = x.Total(),
-            Status=x.Status.ToString(),
+            Status=(OrderDtoStatus)x.Status,
 
         })) ;
         return Results.Ok(response);

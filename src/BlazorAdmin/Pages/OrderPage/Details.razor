@@ -1,0 +1,128 @@
+﻿@inject ILogger<Details> Logger
+@inject IJSRuntime JSRuntime
+@inject IOrderService OrderService
+
+<div class="modal @_modalClass" tabindex="-1" role="dialog" style="display:@_modalDisplay">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @if (_order == null)
+                {
+                    <Spinner></Spinner>
+                }
+                else
+                {
+                    <div class="esh-orders-detail">
+                        <div class="container">
+                            <section class="esh-orders-detail-section">
+                                <article class="esh-orders-detail-titles row">
+                                    <section class="esh-orders-detail-title col-xs-3">Order number</section>
+                                    <section class="esh-orders-detail-title col-xs-3">Date</section>
+                                    <section class="esh-orders-detail-title col-xs-2">Total</section>
+                                    <section class="esh-orders-detail-title col-xs-3">Status</section>
+                                </article>
+
+                                <article class="esh-orders-detail-items row">
+                                    <section class="esh-orders-detail-item col-xs-3">@_order.OrderId</section>
+                                    <section class="esh-orders-detail-item col-xs-3">@_order.OrderDate</section>
+                                    <section class="esh-orders-detail-item col-xs-2">$@_order.TotalPrice.ToString("N2")</section>
+                                    <section class="esh-orders-detail-item col-xs-3">@_order.Status.ToString()</section>
+                                </article>
+                            </section>
+
+                            <section class="esh-orders-detail-section">
+                                <article class="esh-orders-detail-titles row">
+                                    <section class="esh-orders-detail-title col-xs-12">Shipping Address</section>
+                                </article>
+
+                                <article class="esh-orders-detail-items row">
+                                    <section class="esh-orders-detail-item col-xs-12">@_order.ShippingAddress?.Street</section>
+                                </article>
+
+                                <article class="esh-orders-detail-items row">
+                                    <section class="esh-orders-detail-item col-xs-12">@_order.ShippingAddress?.City</section>
+                                </article>
+
+                                <article class="esh-orders-detail-items row">
+                                    <section class="esh-orders-detail-item col-xs-12">@_order.ShippingAddress?.Country</section>
+                                </article>
+                            </section>
+
+                            <section class="esh-orders-detail-section">
+                                <article class="esh-orders-detail-titles row">
+                                    <section class="esh-orders-detail-title col-xs-12">ORDER DETAILS</section>
+                                </article>
+
+                                @for (int i = 0; i < _order.OrderItems.Count; i++)
+                                {
+                                    var item = _order.OrderItems[i];
+                                    <article class="esh-orders-detail-items esh-orders-detail-items--border row">
+                                        <section class="esh-orders-detail-item col-md-4 hidden-md-down">
+                                            <img class="esh-orders-detail-image" src="@item.PictureUrl">
+                                        </section>
+                                        <section class="esh-orders-detail-item esh-orders-detail-item--middle col-xs-3">@item.ProductName</section>
+                                        <section class="esh-orders-detail-item esh-orders-detail-item--middle col-xs-1">$ @item.UnitPrice.ToString("N2")</section>
+                                        <section class="esh-orders-detail-item esh-orders-detail-item--middle col-xs-1">@item.Units</section>
+                                        <section class="esh-orders-detail-item esh-orders-detail-item--middle col-xs-2">$ @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2")</section>
+                                    </article>
+                                }
+                            </section>
+
+                            <section class="esh-orders-detail-section esh-orders-detail-section--right">
+                                <article class="esh-orders-detail-titles esh-basket-titles--clean row">
+                                    <section class="esh-orders-detail-title col-xs-9"></section>
+                                    <section class="esh-orders-detail-title col-xs-2">TOTAL</section>
+                                </article>
+
+                                <article class="esh-orders-detail-items row">
+                                    <section class="esh-orders-detail-item col-xs-9"></section>
+                                    <section class="esh-orders-detail-item esh-orders-detail-item--mark col-xs-2">$@_order.TotalPrice.ToString("N2")</section>
+                                </article>
+                            </section>
+                        </div>
+                    </div>
+
+                }
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _modalDisplay = "none;";
+    private string _modalClass = "";
+    private bool _showDetailsModal = false;
+    private OrderItem _order = new OrderItem();
+    public async Task Open(int id)
+    {
+        Logger.LogInformation("Now loading... /orders/{Id}", id);
+        var response = await OrderService.GetByIdAsync(id);
+        _order = response.Order;
+        if(_order is not null)
+        {
+            _modalDisplay = "block;";
+            _modalClass = "Show";
+            _showDetailsModal = true;
+            StateHasChanged();
+        }
+       
+    }
+    public async Task Close()
+    {
+        await new Css(JSRuntime).ShowBodyOverflow();
+
+        _modalDisplay = "none";
+        _modalClass = "";
+        _showDetailsModal = false;
+    }
+}

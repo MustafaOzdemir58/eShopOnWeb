@@ -56,9 +56,27 @@ public class OrderService : IOrderService
 
     public async Task<List<Order>> GetAllOrdersAsync(string? userId)
     {
-        var orderSpecification = new OrderSpecification(userId);
-        var orders = await _orderRepository.ListAsync(orderSpecification);
+        var ordersSpecification = new OrderSpecification(userId);
+        var orders = await _orderRepository.ListAsync(ordersSpecification);
         return orders;
+    }
+
+    public async Task ApproveOrderAsync(int id)
+    {
+        var orderSpecification = new OrderByIdSpecification(id);
+        var order = await _orderRepository.FirstOrDefaultAsync(orderSpecification);
+        if(order is not null)
+        {
+            order.ApproveOrder();
+            await _orderRepository.UpdateAsync(order);
+        }
+    }
+
+    public async Task<Order> GetOrderByIdAsync(int id)
+    {
+        var orderSpecification = new OrderByIdSpecification(id);
+        var order = await _orderRepository.FirstOrDefaultAsync(orderSpecification);
+        return order;
     }
 
 

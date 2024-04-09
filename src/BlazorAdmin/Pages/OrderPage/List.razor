@@ -25,7 +25,8 @@ else
                 <th>Buyer Name</th>
                 <th>Ordered Date</th>
                 <th>TotalPrice</th>
-                @* <th>Actions</th> *@
+                <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody class="cursor-pointer">
@@ -38,6 +39,20 @@ else
                     <td>@item.Buyer.BuyerName</td>
                     <td>@item.OrderDate</td>
                     <td>@item.TotalPrice</td>
+                    <td>@item.Status.ToString()</td>
+                    <td>
+                        <button @onclick="@(() => DetailClick(item.OrderId))" @onclick:stopPropagation="true" class="btn btn-info">
+                          Detail
+                        </button>
+                        @if (item.Status == OrderItemStatus.Pending)
+                        {
+                            <button @onclick="@(() => ApproveClick(item.OrderId))" @onclick:stopPropagation="true" class="btn btn-info">
+                                Approve Order
+                            </button>
+                        }
+                       
+                        
+                    </td>
                   @*   <td>@item.Name</td>
                     <td>@item.Description</td>
                     <td>@item.Price</td> *@
@@ -55,8 +70,8 @@ else
         </tbody>
     </table>
 
-    @* <Details Brands="@catalogBrands" Types="@catalogTypes" OnEditClick="EditClick" @ref="DetailsComponent"></Details>
-    <Edit Brands="@catalogBrands" Types="@catalogTypes" OnSaveClick="ReloadCatalogItems" @ref="EditComponent"></Edit>
+    <Details OnEditClick="DetailClick" @ref="DetailsComponent"></Details>
+  @*   <Edit Brands="@catalogBrands" Types="@catalogTypes" OnSaveClick="ReloadCatalogItems" @ref="EditComponent"></Edit>
     <Create Brands="@catalogBrands" Types="@catalogTypes" OnSaveClick="ReloadCatalogItems" @ref="CreateComponent"></Create>
     <Delete Brands="@catalogBrands" Types="@catalogTypes" OnSaveClick="ReloadCatalogItems" @ref="DeleteComponent"></Delete> *@
 }

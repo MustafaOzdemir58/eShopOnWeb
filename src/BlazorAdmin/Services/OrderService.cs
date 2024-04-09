@@ -33,4 +33,18 @@ public class OrderService : IOrderService
         var items = orderListTask.Result.Orders;
         return items;
     }
+
+    public async Task<ApproveOrderItemResponse> ApproveOrderAsync(int id)
+    {
+        _logger.LogInformation("Approving order from API.");
+        var approveOrderTask = await _httpService.HttpPut<ApproveOrderItemResponse>($"orders/approve", new ApproveOrderItemRequest { Id = id });
+        return approveOrderTask;
+    }
+
+    public async Task<OrderItemGetByIdResponse> GetByIdAsync(int id)
+    {
+        _logger.LogInformation("Fetching order from API.");
+        var orderByIdTask = await _httpService.HttpGet<OrderItemGetByIdResponse>($"orders/{id}");
+        return orderByIdTask;
+    }
 }

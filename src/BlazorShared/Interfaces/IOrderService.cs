@@ -10,4 +10,7 @@ public interface IOrderService
 {
     Task<List<OrderItem>> ListPaged(int pageSize);
     Task<List<OrderItem>> List();
+    Task<ApproveOrderItemResponse> ApproveOrderAsync(int id);
+    Task<OrderItemGetByIdResponse> GetByIdAsync(int id);
+
 }

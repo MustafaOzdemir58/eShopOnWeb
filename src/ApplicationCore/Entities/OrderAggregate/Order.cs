@@ -46,8 +46,8 @@ public class Order : BaseEntity, IAggregateRoot
         }
         return total;
     }
-    public void ChangeStatus(OrderStatus status)
+    public void ApproveOrder()
     {
-        Status = status;
+        Status = OrderStatus.Approved;
     }
 }

@@ -10,9 +10,11 @@ public class OrderItem
     public int OrderId { get; set; }
     public OrderItemBuyer Buyer { get; set; }
     public List<OrderedItem> OrderItems { get; set; }
+    public OrderItemShippingAddress ShippingAddress { get; set; }
     public DateTimeOffset OrderDate { get; set; }
     public decimal TotalPrice { get; set; }
-    public string Status { get; set; }
+    public OrderItemStatus Status { get; set; }
+    
 }
 
 public class OrderedItem
@@ -26,4 +28,15 @@ public class OrderedItem
 public class OrderItemBuyer
 {
     public string BuyerName { get; set; }
+}
+public class OrderItemShippingAddress
+{
+    public string Street { get; set; }
+    public string City { get; set; }
+    public string Country { get; set; }
+}
+public enum OrderItemStatus :byte
+{
+    Pending,
+    Approved
 }
